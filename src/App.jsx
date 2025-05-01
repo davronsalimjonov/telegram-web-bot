@@ -49,13 +49,17 @@ const App = () => {
   }, [cartItems])
 
   useEffect(() => {
-    telegram.onEvent('mainButtonClicked', onSendData())
+    telegram.onEvent('mainButtonClicked', onSendData)
 
     return () => {
-      telegram.offEvent('mainButtonClicked', onSendData())
+      telegram.offEvent('mainButtonClicked', onSendData)
     }
   }, [onSendData])
 
+  useEffect(() => {
+    telegram.ready();
+  }, []);
+  
   return (
     <div>
       <h1 className={cls.header}>Full Stack Courses</h1>
