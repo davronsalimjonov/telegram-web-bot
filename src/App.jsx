@@ -11,10 +11,6 @@ const telegram = window.Telegram.WebApp
 const App = () => {
   const [cartItems, setCartItems] = useState([])
 
-  useEffect(() => {
-    telegram.ready()
-  })
-
   const onAddItem = (item) => {
     const isAvailable = cartItems.find((course) => course.id === item.id)
 
@@ -40,9 +36,12 @@ const App = () => {
   }
 
   const onCheckout = () => {
-    telegram.MainButton.text = 'Purchase :)'
-    telegram.MainButton.show()
-  }
+    telegram.MainButton.setText('Purchase :)');
+    telegram.MainButton.onClick(() => {
+      telegram.sendData(JSON.stringify(cartItems));
+    });
+    telegram.MainButton.show();
+  };
 
   const onSendData = useCallback(() => {
     telegram.sendData(JSON.stringify(cartItems))
