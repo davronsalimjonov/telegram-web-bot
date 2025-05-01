@@ -44,7 +44,37 @@ const App = () => {
   };
 
   const onSendData = useCallback(() => {
-    telegram.sendData(JSON.stringify(cartItems))
+    const queryId = telegram.initDataUnsafe.query_id
+
+    if (queryId) {
+      fetch("https://api.telegram.org/bot" + telegram.token + "/sendMessage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: telegram.initDataUnsafe.user.id,
+          text: JSON.stringify(cartItems),
+          reply_markup: {
+            remove_keyboard: true
+          }
+        })
+      })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Message sent successfully");
+        } else {
+          console.error("Error sending message:", response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error("Error sending message:", error);
+      });
+      telegram.MainButton.hide()
+    } else {
+      telegram.sendData(JSON.stringify(cartItems))
+    }
+
   }, [cartItems])
 
   useEffect(() => {
