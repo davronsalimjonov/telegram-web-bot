@@ -47,7 +47,7 @@ const App = () => {
     const queryId = telegram.initDataUnsafe.query_id
 
     if (queryId) {
-      fetch('http://localhost:8000/web-data', {
+      fetch('https://salimjonovdavron-web-tg-bot-b461901c2af9.herokuapp.com/web-data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
