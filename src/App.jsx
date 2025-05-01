@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import cls from './App.module.scss'
 import Card from './Components/Card/Card'
 import Cart from './Components/Cart'
@@ -19,10 +19,10 @@ const App = () => {
     const isAvailable = cartItems.find((course) => course.id === item.id)
 
     if (isAvailable) {
-      const data = cartItems.map((course) => course.id === item.id ? {...isAvailable, quantity: isAvailable.quantity + 1} : course)
+      const data = cartItems.map((course) => course.id === item.id ? { ...isAvailable, quantity: isAvailable.quantity + 1 } : course)
       setCartItems(data)
     } else {
-      const newData = [...cartItems, {...item, quantity: 1}]
+      const newData = [...cartItems, { ...item, quantity: 1 }]
       setCartItems(newData)
     }
   }
@@ -34,7 +34,7 @@ const App = () => {
       const newData = cartItems.filter((course) => course.id !== isAvailable.id)
       setCartItems(newData)
     } else {
-      const newData = cartItems.map((course) => course.id === isAvailable.id ? {...isAvailable, quantity: isAvailable.quantity - 1} : course)
+      const newData = cartItems.map((course) => course.id === isAvailable.id ? { ...isAvailable, quantity: isAvailable.quantity - 1 } : course)
       setCartItems(newData)
     }
   }
@@ -44,18 +44,30 @@ const App = () => {
     telegram.MainButton.show()
   }
 
+  const onSendData = useCallback(() => {
+    telegram.sendData(JSON.stringify(cartItems))
+  }, [cartItems])
+
+  useEffect(() => {
+    telegram.onEvent('mainButtonClicked', onSendData())
+
+    return () => {
+      telegram.offEvent('mainButtonClicked', onSendData())
+    }
+  }, [onSendData])
+
   return (
     <div>
       <h1 className={cls.header}>Full Stack Courses</h1>
-      <Cart 
+      <Cart
         cartItems={cartItems}
         onCheckout={onCheckout}
       />
       <div className={cls.cards__container}>
         {courses.map((course, index) => (
-          <Card 
-            course={course} 
-            index={index + 1} 
+          <Card
+            course={course}
+            index={index + 1}
             onAddItem={onAddItem}
             onRemoveItem={onRemoveItem}
           />
