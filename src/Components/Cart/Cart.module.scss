@@ -1,0 +1,37 @@
+.cart__container {
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+    margin-top: 32px;
+    gap: 10px;
+
+    & button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem 0.8rem;
+        font-size: 20px;
+        border: 0;
+        outline: none;
+        border-radius: 10px;
+        width: 120px;
+        box-shadow: 1px -3px  52px -5px rgba(0, 0, 0, 0.77);
+        cursor: pointer;
+        transition: all 0.4s ease;
+    }
+
+    &__checkout {
+        background-color: #47bb77c6;
+        width: 150px;
+        color: #fff;
+        font-size: 16px;
+
+        &:hover {
+            background-color: #47bb78;
+        }
+
+        &:active {
+            background-color: rgb(30, 93, 41);
+        }
+    }
+}
